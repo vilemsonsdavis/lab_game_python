@@ -73,7 +73,7 @@ class Labyrinth(object):
 
     def main(self):
         run = True
-        global mazeDrawn, maze, player
+        global mazeDrawn, maze, player, solved
         maze = maze_gen.Generator((self.height - 50) / 20, self.width / 20, self.lab_game, False)
         player = p.Player(self.player_name, self.lab_game, maze.wallCoords)
 
@@ -93,7 +93,7 @@ class Labyrinth(object):
                         maze = maze_gen.Generator((self.height - 50) / 20, self.width / 20, self.lab_game, False)
                         player = p.Player(self.player_name, self.lab_game, maze.wallCoords)
                     if (pos[0] >= 610 and pos[0] <= 810) and (pos[1] >= 5 and pos[1] <= 45):
-                        ms.Solver(self.lab_game, maze.wallCoords, player)
+                        solved = ms.Solver(self.lab_game, maze.wallCoords, player)
                     if (pos[0] >= self.width-100 and pos[0] <= self.width - 20) and (pos[1] >= 5 and pos[1] <= 45):
                         run = False
 
