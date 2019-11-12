@@ -103,16 +103,16 @@ class Solver(object):
         return neighbours
 
     def draw_solution(self):
-        self.lab_game.fill((255, 255, 255))
-        pygame.draw.rect(self.lab_game, (0, 0, 0), (0, 0, 50 * 20, 50))
-        self.drawGrid()
-        self.drawMaze()
         prev = None
         while True:
+            self.lab_game.fill((255, 255, 255))
+            pygame.draw.rect(self.lab_game, (0, 0, 0), (0, 0, 50 * 20, 50))
+            self.drawGrid()
+            self.drawMaze()
             for e, c in enumerate(reversed(self.waylist), 2):
                 clock.tick(10)
                 pygame.time.delay(10)
-                if e > len(self.waylist):
+                if e - 1 > len(self.waylist):
                     break
 
                 self.lab_game.blit(self.player.pic, ((c[0] - 1) * 20 + 1, (c[1] - 1) * 20 + 51))
@@ -126,14 +126,15 @@ class Solver(object):
                 if prev == 'down':
                     self.lab_game.blit(arr_down, ((c[0] - 1) * 20 + 1, (c[1] - 2) * 20 + 51))
 
-                if c[0] < self.waylist[-e][0]:
-                    prev = 'right'
-                if c[0] > self.waylist[-e][0]:
-                    prev = 'left'
-                if c[1] < self.waylist[-e][1]:
-                    prev = 'down'
-                if c[1] > self.waylist[-e][1]:
-                    prev = 'up'
+                if e - len(self.waylist) != 1:
+                    if c[0] < self.waylist[-e][0]:
+                        prev = 'right'
+                    if c[0] > self.waylist[-e][0]:
+                        prev = 'left'
+                    if c[1] < self.waylist[-e][1]:
+                        prev = 'down'
+                    if c[1] > self.waylist[-e][1]:
+                        prev = 'up'
 
                 pygame.display.update()
                 self.draw_buttons()
