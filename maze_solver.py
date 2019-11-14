@@ -109,13 +109,11 @@ class Solver(object):
             pygame.draw.rect(self.lab_game, (0, 0, 0), (0, 0, 50 * 20, 50))
             self.drawGrid()
             self.drawMaze()
+            self.player.x = 1
+            self.player.y = 51
             for e, c in enumerate(reversed(self.waylist), 2):
-                clock.tick(10)
-                pygame.time.delay(10)
                 if e - 1 > len(self.waylist):
                     break
-
-                self.lab_game.blit(self.player.pic, ((c[0] - 1) * 20 + 1, (c[1] - 1) * 20 + 51))
 
                 if prev == 'right':
                     self.lab_game.blit(arr_right, ((c[0] - 2) * 20 + 1, (c[1] - 1) * 20 + 51))
@@ -136,10 +134,52 @@ class Solver(object):
                     if c[1] > self.waylist[-e][1]:
                         prev = 'up'
 
-                pygame.display.update()
+                if prev == 'right':
+                    for i in range(20):
+                        clock.tick(100)
+                        pygame.time.delay(2)
+                        pygame.display.update()
+                        pygame.draw.rect(self.lab_game, (255, 255, 255), (self.player.x, self.player.y, 18, 18))
+                        self.player.x += 1
+                        self.player.pic = self.player.playerr[int(self.player.walkCount / 5) % 2]
+                        self.player.walkCount += 1
+                        self.player.drawPlayer()
+                if prev == 'left':
+                    for i in range(20):
+                        clock.tick(100)
+                        pygame.time.delay(2)
+                        pygame.display.update()
+                        pygame.draw.rect(self.lab_game, (255, 255, 255), (self.player.x, self.player.y, 18, 18))
+                        self.player.x -= 1
+                        self.player.pic = self.player.playerl[int(self.player.walkCount / 5) % 2]
+                        self.player.walkCount += 1
+                        self.player.drawPlayer()
+                if prev == 'up':
+                    for i in range(20):
+                        clock.tick(100)
+                        pygame.time.delay(2)
+                        pygame.display.update()
+                        pygame.draw.rect(self.lab_game, (255, 255, 255), (self.player.x, self.player.y, 18, 18))
+                        self.player.y -= 1
+                        self.player.pic = self.player.playeru[int(self.player.walkCount / 5) % 2]
+                        self.player.walkCount += 1
+                        self.player.drawPlayer()
+                if prev == 'down':
+                    for i in range(20):
+                        clock.tick(100)
+                        pygame.time.delay(2)
+                        pygame.display.update()
+                        pygame.draw.rect(self.lab_game, (255, 255, 255), (self.player.x, self.player.y, 18, 18))
+                        self.player.y += 1
+                        self.player.pic = self.player.playerd[int(self.player.walkCount / 5) % 2]
+                        self.player.walkCount += 1
+                        self.player.drawPlayer()
+
                 self.draw_buttons()
                 if self.exit:
                     return
+            clock.tick(10)
+            pygame.time.delay(10)
 
     def solve(self):
         global clock
