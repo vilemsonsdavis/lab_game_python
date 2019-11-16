@@ -1,5 +1,4 @@
 import pygame
-import random
 
 arr_left = pygame.image.load('lab_game/green_arrow_left.png')
 arr_right = pygame.image.load('lab_game/green_arrow_right.png')
@@ -177,6 +176,9 @@ class Solver(object):
 
                 self.draw_buttons()
                 if self.exit:
+                    self.player.x = 1
+                    self.player.y = 51
+                    self.player.pic = self.player.playerd[0]
                     return
             clock.tick(10)
             pygame.time.delay(10)
@@ -189,6 +191,9 @@ class Solver(object):
             clock.tick(100)
             self.cells = self.add_neighbours(self.cells)
             if self.exit:
+                self.player.x = 1
+                self.player.y = 51
+                self.player.pic = self.player.playerd[0]
                 return
 
         self.draw_solution()
