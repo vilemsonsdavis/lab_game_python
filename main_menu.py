@@ -1,6 +1,7 @@
 import pygame
 import menu as m
 import database as db
+import user_info_log as uil
 
 
 def redrawMenu(menu):
@@ -13,7 +14,7 @@ def redrawMenu(menu):
 
     mouse_pos = pygame.mouse.get_pos()
     if (mouse_pos[0] >= 95 and mouse_pos[0] <= 305) and (mouse_pos[1] >= 50 and mouse_pos[1] <= 100):
-        play_col = (0, 255, 0)
+        menu_col = (0, 255, 0)
     if (mouse_pos[0] >= 95 and mouse_pos[0] <= 305) and (mouse_pos[1] >= 133 and mouse_pos[1] <= 183):
         user_col = (0, 255, 0)
     if (mouse_pos[0] >= 95 and mouse_pos[0] <= 305) and (mouse_pos[1] >= 216 and mouse_pos[1] <= 266):
@@ -61,8 +62,7 @@ def main():
                 if (pos[0] >= 95 and pos[0] <= 305) and (pos[1] >= 50 and pos[1] <= 100):
                     m.Menu()
                 if (pos[0] >= 95 and pos[0] <= 305) and (pos[1] >= 133 and pos[1] <= 183):
-                    pass
-                    # TO DO - implement user info filling log
+                    uil.User_info_log()
                 if (pos[0] >= 95 and pos[0] <= 305) and (pos[1] >= 216 and pos[1] <= 266):
                     db.read_users()
                 if (pos[0] >= 95 and pos[0] <= 305) and (pos[1] >= 299 and pos[1] <= 349):
