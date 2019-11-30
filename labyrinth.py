@@ -46,7 +46,7 @@ def drawGrid(lab_game):
 def redrawWindow(lab_game, width, height):
     lab_game.fill((255, 255, 255))
     drawGrid(lab_game)
-    drawMaze(lab_game, maze.wallCoords)
+    drawMaze(lab_game, maze.wall_coordinations)
     player.movePlayer()
     drawButtons(lab_game)
     player.drawPlayer()
@@ -75,7 +75,7 @@ class Labyrinth(object):
         run = True
         global mazeDrawn, maze, player, solved
         maze = maze_gen.Generator((self.height - 50) / 20, self.width / 20, self.lab_game, False)
-        player = p.Player(self.player_name, self.lab_game, maze.wallCoords)
+        player = p.Player(self.player_name, self.lab_game, maze.wall_coordinations)
 
         while run:
 
@@ -88,12 +88,12 @@ class Labyrinth(object):
 
                     if (pos[0] >= 20 and pos[0] <= 270) and (pos[1] >= 5 and pos[1] <= 45):
                         maze = maze_gen.Generator((self.height - 50) / 20, self.width / 20, self.lab_game, True)
-                        player = p.Player(self.player_name, self.lab_game, maze.wallCoords)
+                        player = p.Player(self.player_name, self.lab_game, maze.wall_coordinations)
                     if (pos[0] >= 290 and pos[0] <= 590) and (pos[1] >= 5 and pos[1] <= 45):
                         maze = maze_gen.Generator((self.height - 50) / 20, self.width / 20, self.lab_game, False)
-                        player = p.Player(self.player_name, self.lab_game, maze.wallCoords)
+                        player = p.Player(self.player_name, self.lab_game, maze.wall_coordinations)
                     if (pos[0] >= 610 and pos[0] <= 810) and (pos[1] >= 5 and pos[1] <= 45):
-                        solved = ms.Solver(self.lab_game, maze.wallCoords, player)
+                        solved = ms.Solver(self.lab_game, maze.wall_coordinations, player)
                     if (pos[0] >= self.width-100 and pos[0] <= self.width - 20) and (pos[1] >= 5 and pos[1] <= 45):
                         run = False
 

@@ -64,7 +64,8 @@ def main():
                     pass
                     # TO DO - implement user info filling log
                 if (pos[0] >= 95 and pos[0] <= 305) and (pos[1] >= 216 and pos[1] <= 266):
-                    db.read_users()
+                    pass
+                    #db.read_users()
                 if (pos[0] >= 95 and pos[0] <= 305) and (pos[1] >= 299 and pos[1] <= 349):
                     pygame.quit()
 
