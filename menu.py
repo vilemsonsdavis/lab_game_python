@@ -1,89 +1,75 @@
 import pygame
 import labyrinth
 import player_menu as pm
+import button
 
 
 class Menu(object):
     def __init__(self):
+        self.music = 'Music: ON'
+        self.width = self.height = 400
+        self.run = self.musicOn = True
+        self.ok = self.playermenu = False
+        self.play_button = self.character_button = self.music_button = self.exit_button = self.pmo = self.menu_display = None
+        self.create_display()
         self.main()
 
-    def redrawMenu(self, menu):
-        menu.fill((0, 0, 0))
-
-        game_col = (255, 255, 255)
-        exit_col = (255, 255, 255)
-        mus_col = (255, 255, 255)
-        play_col = (255, 255, 255)
-
-        mouse_pos = pygame.mouse.get_pos()
-        if (mouse_pos[0] >= 95 and mouse_pos[0] <= 305) and (mouse_pos[1] >= 50 and mouse_pos[1] <= 100):
-            game_col = (0, 255, 0)
-        if (mouse_pos[0] >= 95 and mouse_pos[0] <= 305) and (mouse_pos[1] >= 133 and mouse_pos[1] <= 183):
-            play_col = (0, 255, 0)
-        if (mouse_pos[0] >= 95 and mouse_pos[0] <= 305) and (mouse_pos[1] >= 216 and mouse_pos[1] <= 266):
-            if not musicb:
-                mus_col = (0, 255, 0)
+    def check_for_action(self):
+        if self.play_button.isMouseOn():
+            if not self.playermenu:
+                labyrinth.Labyrinth('king')
             else:
-                mus_col = (255, 0, 0)
-        if (mouse_pos[0] >= 95 and mouse_pos[0] <= 305) and (mouse_pos[1] >= 299 and mouse_pos[1] <= 349):
-            exit_col = (255, 0, 0)
+                labyrinth.Labyrinth(self.pmo.player)
+            self.create_display()
+        elif self.character_button.isMouseOn():
+            self.pmo = pm.PlayerMenu()
+            self.playermenu = True
+        elif self.music_button.isMouseOn():
+            if self.musicOn:
+                self.music = 'Music: OFF'
+                self.musicOn = False
+            else:
+                self.music = 'Music: ON'
+                self.musicOn = True
+            self.create_buttons()
+        elif self.exit_button.isMouseOn():
+            self.run = False
 
-        pygame.draw.rect(menu, game_col, (90, 50, 210, 50))
-        pygame.draw.rect(menu, play_col, (90, 133, 210, 50))
-        pygame.draw.rect(menu, mus_col, (90, 216, 210, 50))
-        pygame.draw.rect(menu, exit_col, (90, 299, 210, 50))
-        pygame.font.init()
-        myfont = pygame.font.SysFont('Comic Sans MS', 30)
-        gamebutton = myfont.render('Play', False, (0, 0, 0))
-        playbutton = myfont.render('Choose Player', False, (0, 0, 0))
-        musicbutton = myfont.render(music, False, (0, 0, 0))
-        exitbutton = myfont.render('Exit', False, (0, 0, 0))
-        menu.blit(gamebutton, (170, 50))
-        menu.blit(playbutton, (100, 133))
-        menu.blit(musicbutton, (123, 216))
-        menu.blit(exitbutton, (170, 299))
+    def create_buttons(self):
+        self.play_button = button.Button(self.menu_display, 90, 50, 210, 50, "Play", False)
+        self.character_button = button.Button(self.menu_display, 90, 133, 210, 50, "Choose Character", False)
+        self.music_button = button.Button(self.menu_display, 90, 216, 210, 50, self.music, False)
+        self.exit_button = button.Button(self.menu_display, 90, 299, 210, 50, "Exit", True)
+
+    def draw_buttons(self):
+        self.play_button.draw()
+        self.character_button.draw()
+        self.music_button.draw()
+        self.exit_button.draw()
+
+    def check_events(self):
+        events = pygame.event.get()
+        for event in events:
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                self.ok = True
+            if event.type == pygame.QUIT:
+                self.run = False
+            if event.type == pygame.MOUSEBUTTONUP and self.ok:
+                self.ok = False
+                self.check_for_action()
+
+    def draw_menu(self):
+        self.menu_display.fill((0, 0, 0))
+        self.draw_buttons()
         pygame.display.update()
 
+    def create_display(self):
+        self.menu_display = pygame.display.set_mode((self.width, self.height))
+        pygame.display.set_caption("Davis maze game Main Menu")
+
     def main(self):
-        global width, height, music, musicb
-        music = 'Music: ON'
-        width = 400
-        height = 400
-        run = True
-        ok = False
-        musicb = True
-        playermenu = False
+        self.create_buttons()
 
-        while run:
-            menu = pygame.display.set_mode((width, height))
-            pygame.display.set_caption("Davis maze game Main Menu")
-
-            events = pygame.event.get()
-            for event in events:
-                if event.type == pygame.MOUSEBUTTONDOWN:
-                    ok = True
-                if event.type == pygame.QUIT:
-                    run = False
-                if event.type == pygame.MOUSEBUTTONUP and ok:
-                    pos = pygame.mouse.get_pos()
-                    ok = False
-
-                    if (pos[0] >= 95 and pos[0] <= 305) and (pos[1] >= 50 and pos[1] <= 100):
-                        if not playermenu:
-                            labyrinth.Labyrinth('king')
-                        else:
-                            labyrinth.Labyrinth(pmo.player)
-                    if (pos[0] >= 95 and pos[0] <= 305) and (pos[1] >= 133 and pos[1] <= 183):
-                        pmo = pm.PlayerMenu()
-                        playermenu = True
-                    if (pos[0] >= 95 and pos[0] <= 305) and (pos[1] >= 216 and pos[1] <= 266):
-                        if musicb:
-                            music = 'Music: OFF'
-                            musicb = False
-                        else:
-                            music = 'Music: ON'
-                            musicb = True
-                    if (pos[0] >= 95 and pos[0] <= 305) and (pos[1] >= 299 and pos[1] <= 349):
-                        run = False
-
-            self.redrawMenu(menu)
+        while self.run:
+            self.check_events()
+            self.draw_menu()
