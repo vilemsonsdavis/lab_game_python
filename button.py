@@ -21,7 +21,7 @@ class Button():
         else:
             self.color = (255, 255, 255)
 
-    def isMouseOn(self):   #90, 50, 210, 50
+    def isMouseOn(self):
         mouse_pos = pygame.mouse.get_pos()
         if (mouse_pos[0] >= self.x and mouse_pos[0] <= self.x + self.width) and \
                 (mouse_pos[1] >= self.y and mouse_pos[1] <= self.y + self.height):
