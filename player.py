@@ -47,10 +47,10 @@ class Player(object):
         self.walls = walls
         self.player_pics = self.playerl = self.playerr = self.playerd = self.playeru = []
         self.pic = None
-        self.checkPlayer()
-        self.walkCount = 0
+        self.check_player()
+        self.walk_count = 0
 
-    def checkPlayer(self):
+    def check_player(self):
         if self.player_name == 'king':
             self.player_pics = king
         if self.player_name == 'predator':
@@ -67,77 +67,92 @@ class Player(object):
         self.playeru = [self.player_pics[2], self.player_pics[3]]
         self.playerd = [self.player_pics[0], self.player_pics[1]]
 
-    def drawPlayer(self):
+    def draw_player(self):
         self.lab_game.blit(self.pic, (self.x, self.y))
 
-    def movePlayer(self):
+    def move_player(self):
         keys = pygame.key.get_pressed()
 
         if keys[pygame.K_LEFT]:
             if self.x > 1:
                 self.x -= 1
-            self.pic = self.playerl[int((self.walkCount % 40) / 20)]
-            self.walkCount += 1
+            self.pic = self.playerl[int((self.walk_count % 40) / 20)]
+            self.walk_count += 1
         if keys[pygame.K_RIGHT]:
             if self.x < 981:
                 self.x += 1
-            self.pic = self.playerr[int((self.walkCount % 40) / 20)]
-            self.walkCount += 1
+            self.pic = self.playerr[int((self.walk_count % 40) / 20)]
+            self.walk_count += 1
         if keys[pygame.K_UP]:
             if self.y > 51:
                 self.y -= 1
-            self.pic = self.playeru[int((self.walkCount % 40) / 20)]
-            self.walkCount += 1
+            self.pic = self.playeru[int((self.walk_count % 40) / 20)]
+            self.walk_count += 1
         if keys[pygame.K_DOWN]:
             if self.y < 631:
                 self.y += 1
-            self.pic = self.playerd[int((self.walkCount % 40) / 20)]
-            self.walkCount += 1
+            self.pic = self.playerd[int((self.walk_count % 40) / 20)]
+            self.walk_count += 1
 
-        self.checkWall()
+        self.check_wall()
 
-    def checkWall(self):
+    def check_if_possible_to_walk(self, wall_one, wall_two, wall_three, direction):
+        if wall_one not in self.walls or wall_two not in self.walls or \
+                ((wall_one != wall_two and wall_one in self.walls and wall_two in self.walls) \
+                 and wall_three not in self.walls):
+            if direction == 'right':
+                self.x -= 1
+            elif direction == 'left':
+                self.x += 1
+            elif direction == 'up':
+                self.y += 1
+            elif direction == 'down':
+                self.y -= 1
+
+    def check_wall(self):
         if (self.x + 18) % 20 == 0: #right side wall
             wall_one_y = self.y - ((self.y-10)%20) + 1
             wall_two_y = (self.y + 18) - ((self.y+8)%20) + 1
-            wall_one = ((self.x+18, wall_one_y), (self.x+18, wall_one_y + 18 ))
-            wall_two = ((self.x+18, wall_two_y), (self.x+18, wall_two_y + 18 ))
+            wall_x = self.x + 18
+
+            wall_one = ((wall_x, wall_one_y), (wall_x, wall_one_y + 18 ))
+            wall_two = ((wall_x, wall_two_y), (wall_x, wall_two_y + 18 ))
             wall_three = ((self.x+19, wall_one_y + 19), (self.x+37, wall_one_y + 19))
-            if wall_one not in self.walls or wall_two not in self.walls or \
-                    ((wall_one != wall_two and wall_one in self.walls and wall_two in self.walls) \
-                    and wall_three not in self.walls):
-                self.x -= 1
+
+            self.check_if_possible_to_walk(wall_one, wall_two, wall_three, 'right')
 
         if self.x % 20 == 0: #left side wall
             wall_one_y = self.y - ((self.y-10)%20) + 1
             wall_two_y = (self.y + 18) - ((self.y+8)%20) + 1
-            wall_one = ((self.x, wall_one_y), (self.x, wall_one_y + 18 ))
-            wall_two = ((self.x, wall_two_y), (self.x, wall_two_y + 18 ))
+            wall_x = self.x
+
+            wall_one = ((wall_x, wall_one_y), (wall_x, wall_one_y + 18 ))
+            wall_two = ((wall_x, wall_two_y), (wall_x, wall_two_y + 18 ))
             wall_three = ((self.x-19, wall_one_y + 19), (self.x-1, wall_one_y + 19))
-            if wall_one not in self.walls or wall_two not in self.walls or \
-                    ((wall_one != wall_two and wall_one in self.walls and wall_two in self.walls) \
-                    and wall_three not in self.walls):
-                self.x += 1
+
+            self.check_if_possible_to_walk(wall_one, wall_two, wall_three, 'left')
+
         if self.y % 20 == 10: #above side wall
             wall_one_x = self.x - (self.x%20) + 1
             wall_two_x = (self.x + 18) - ((self.x+18)%20) + 1
-            wall_one = ((wall_one_x, self.y), (wall_one_x + 18, self.y ))
-            wall_two = ((wall_two_x, self.y), (wall_two_x + 18, self.y ))
+            wall_y = self.y
+
+            wall_one = ((wall_one_x, wall_y), (wall_one_x + 18, wall_y ))
+            wall_two = ((wall_two_x, wall_y), (wall_two_x + 18, wall_y ))
             wall_three = ((wall_one_x + 19, self.y-19), (wall_one_x + 19, self.y-1))
-            if wall_one not in self.walls or wall_two not in self.walls or \
-                    ((wall_one != wall_two and wall_one in self.walls and wall_two in self.walls) \
-                    and wall_three not in self.walls):
-                self.y += 1
+
+            self.check_if_possible_to_walk(wall_one, wall_two, wall_three, 'up')
+
         if (self.y + 18) % 20 == 10: #below side wall
             wall_one_x = self.x - (self.x % 20) + 1
             wall_two_x = (self.x + 18) - ((self.x + 18) % 20) + 1
-            wall_one = ((wall_one_x, self.y+18), (wall_one_x + 18, self.y+18))
-            wall_two = ((wall_two_x, self.y+18), (wall_two_x + 18, self.y+18))
+            wall_y = self.y + 18
+
+            wall_one = ((wall_one_x, wall_y), (wall_one_x + 18, wall_y))
+            wall_two = ((wall_two_x, wall_y), (wall_two_x + 18, wall_y))
             wall_three = ((wall_one_x + 19, self.y + 19), (wall_one_x + 19, self.y + 37))
-            if wall_one not in self.walls or wall_two not in self.walls or \
-                    ((wall_one != wall_two and wall_one in self.walls and wall_two in self.walls) \
-                    and wall_three not in self.walls):
-                self.y -= 1
+
+            self.check_if_possible_to_walk(wall_one, wall_two, wall_three, 'down')
 
 
 
