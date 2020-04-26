@@ -48,8 +48,8 @@ class Labyrinth(object):
         self.draw_grid()
         self.draw_buttons()
         self.draw_maze()
-        self.player.movePlayer()
-        self.player.drawPlayer()
+        self.player.move_player()
+        self.player.draw_player()
         pygame.display.update()
 
     def check_events(self):
