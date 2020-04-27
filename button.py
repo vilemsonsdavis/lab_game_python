@@ -7,6 +7,7 @@ class Button():
         self.y = y
         self.width = width
         self.height = height
+        self.text_width = self.text_height = 0
         self.color = (255, 255, 255)
         self.text = self.add_text(text)
         self.isExit = isExit
@@ -31,12 +32,15 @@ class Button():
 
     def draw(self):
         self.color_button()
+        text_x_pos = self.x + (self.width - self.text_width) / 2
+        text_y_pos = self.y + (self.height - self.text_height) / 2
         pygame.draw.rect(self.display, self.color, (self.x, self.y, self.width, self.height))
-        self.display.blit(self.text, (self.x, self.y))
+        self.display.blit(self.text, (text_x_pos, text_y_pos))
 
     def add_text(self, text):
         pygame.font.init()
         font = pygame.font.SysFont('Comic Sans MS', 30)
+        self.text_width, self.text_height = font.size(text)
         return font.render(text, False, (0, 0, 0))
 
 

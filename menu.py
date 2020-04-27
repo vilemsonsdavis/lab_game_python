@@ -3,13 +3,15 @@ import labyrinth
 import player_menu as pm
 import button
 
+pygame.mixer.pre_init(44100,16,2,4096)
+pygame.init()
 
 class Menu(object):
     def __init__(self):
-        self.music = 'Music: ON'
+        self.music = 'Music: OFF'
         self.width = self.height = 400
-        self.run = self.musicOn = True
-        self.ok = self.playermenu = False
+        self.run =  True
+        self.musicOn = self.ok = self.playermenu = False
         self.play_button = self.character_button = self.music_button = self.exit_button = self.pmo = self.menu_display = None
         self.create_display()
         self.main()
@@ -28,9 +30,13 @@ class Menu(object):
             if self.musicOn:
                 self.music = 'Music: OFF'
                 self.musicOn = False
+                pygame.mixer.music.stop()
             else:
                 self.music = 'Music: ON'
                 self.musicOn = True
+                pygame.mixer.music.load('lab_game/background_song.mp3')
+                pygame.mixer.music.set_volume(0.5)
+                pygame.mixer.music.play(-1)
             self.create_buttons()
         elif self.exit_button.isMouseOn():
             self.run = False
