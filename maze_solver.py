@@ -78,8 +78,6 @@ class Solver(object):
         self.cell_mapping[cell] = prev_neighbour
         neighbours.append(cell)
         self.draw_cell(cell)
-        if self.finish_position in self.cell_mapping.keys():
-            self.backtrack_way()
 
     def add_neighbours(self, prev_neighbours):
         neighbours = []
@@ -103,6 +101,9 @@ class Solver(object):
                 self.mark_cell(down_cell, prev_neighbour, neighbours)
             if up_cell not in self.cell_mapping.keys() and up_cell[1] >= 1 and upwall in self.wall_coords:
                 self.mark_cell(up_cell, prev_neighbour, neighbours)
+
+        if self.finish_position in self.cell_mapping.keys():
+            self.backtrack_way()
 
         return neighbours
 
@@ -145,14 +146,16 @@ class Solver(object):
                 moving_hor_y = (c[1] - 1) * 20 + 51
                 prev_left_x = c[0] * 20 + 1
                 prev_right_x = (c[0] - 2) * 20 + 1
-                if prev == 'right':
-                    self.lab_game.blit(arr_right, (prev_right_x, moving_hor_y))
-                if prev == 'left':
-                    self.lab_game.blit(arr_left, (prev_left_x, moving_hor_y))
-                if prev == 'up':
-                    self.lab_game.blit(arr_up, (moving_ver_x, prev_up_y))
-                if prev == 'down':
-                    self.lab_game.blit(arr_down, (moving_ver_x, prev_down_y))
+
+                if e != 2:
+                    if prev == 'right':
+                        self.lab_game.blit(arr_right, (prev_right_x, moving_hor_y))
+                    if prev == 'left':
+                        self.lab_game.blit(arr_left, (prev_left_x, moving_hor_y))
+                    if prev == 'up':
+                        self.lab_game.blit(arr_up, (moving_ver_x, prev_up_y))
+                    if prev == 'down':
+                        self.lab_game.blit(arr_down, (moving_ver_x, prev_down_y))
 
                 if e - len(self.correct_way_cells) != 1:
                     if c[0] < self.correct_way_cells[-e][0]:

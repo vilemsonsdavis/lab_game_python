@@ -9,17 +9,20 @@ class Button():
         self.height = height
         self.text_width = self.text_height = 0
         self.color = (255, 255, 255)
-        self.text = self.add_text(text)
         self.isExit = isExit
+        self.text = self.add_text(text)
 
     def color_button(self):
         mouse_on_button = self.isMouseOn()
+
         if mouse_on_button:
             if self.isExit:
                 self.color = (255, 0, 0)
-            else:
+            elif not self.isExit and self.color != (255, 0, 0):
                 self.color = (0, 255, 0)
-        else:
+        elif not self.isExit and self.color != (255, 0, 0):
+            self.color = (255, 255, 255)
+        elif self.isExit:
             self.color = (255, 255, 255)
 
     def isMouseOn(self):
@@ -39,7 +42,7 @@ class Button():
 
     def add_text(self, text):
         pygame.font.init()
-        font = pygame.font.SysFont('Comic Sans MS', 30)
+        font = pygame.font.SysFont('arial', 25)
         self.text_width, self.text_height = font.size(text)
         return font.render(text, False, (0, 0, 0))
 
