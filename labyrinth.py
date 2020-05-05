@@ -3,6 +3,7 @@ import maze_gen
 import maze_solver as ms
 import player as p
 import button
+import game_finished
 
 
 class Labyrinth(object):
@@ -59,6 +60,14 @@ class Labyrinth(object):
                 self.run = False
             if event.type == pygame.MOUSEBUTTONUP:
                 self.check_for_action()
+
+        if self.player.x >= 980 and self.player.y >= 630:
+            gf = game_finished.Game_Finished()
+            if gf.play_again:
+                self.maze = maze_gen.Generator((self.height - 50) / 20, self.width / 20, self.game_display, False)
+                self.player = p.Player(self.player_name, self.game_display, self.maze.wall_coordinations)
+            else:
+                self.run = False
 
     def create_display(self):
         self.game_display = pygame.display.set_mode((self.width, self.height))
